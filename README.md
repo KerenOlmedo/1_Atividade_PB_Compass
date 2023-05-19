@@ -42,3 +42,12 @@ OFFLINE;
 
 ## 📝 Instruções de Execução
 
+Subir instância EC2 com par de chaves
+- Acessar a AWS na pagina do serviço EC2, e clicar em "instancias" no menu lateral esquerdo.
+- Clicar em "executar instâncias" na parte superior esquerda da tela.
+- Inserir um nome para a sua máquina e clicar em "adicionar mais tags".
+
+<br>
+
+## 📎 Referências
+[MEditor.md](https://pandao.github.io/editor.md/index.html)

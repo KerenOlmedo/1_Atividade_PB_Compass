@@ -41,11 +41,52 @@ OFFLINE;
 <br>
 
 ## 📝 Instruções de Execução
-
-Subir instância EC2 com par de chaves
+### >> AWS
+#### Subir instância EC2 com par de chaves pública
 - Acessar a AWS na pagina do serviço EC2, e clicar em "instancias" no menu lateral esquerdo.
 - Clicar em "executar instâncias" na parte superior esquerda da tela.
-- Inserir um nome para a sua máquina e clicar em "adicionar mais tags".
+- Abaixo do campo de inserir nome clicar em "adicionar mais tags".
+- Crie e insira o valor para as chaves: Name, Project e CostCenter, selecionando "intancias", "volume" e "interface de rede" como tipos de recurso.
+- Abaixo selecione também a AMI Amazon Linux 2(HVM) SSD Volume Type.
+- Selecionar como tipo de intância a família t3.small.
+- Em Par de chaves login clique em "criar novo par de chaves".
+- Insira o nome do par de chaves, tipo RSA, formato .ppk e clique em "criar par de chaves".
+- Em configurações de rede, selecione criar grupo de segurança e permitir todos tráfegos(SSH, HTTPS, HTTP).
+- Configure o armazenamento com 16GiB, volume raiz gp2.
+- Clique em executar instância.
+<br>
+
+#### Gerar Elastic IP e anexar à instância EC2
+- Acessar a pagina do serviço EC2, no menu lateral esquerdo em "Rede e Segurança" e clicar em "IPs elásticos".
+- Clicar em "Alocar endereço IP elástico".
+- Automaticamente a região padrão vai vir como "Grupo de borda de Rede" e selecionado Conjunto de endereços IPv4 públicos da Amazon.
+- Clicar em "Alocar".
+- Depois de criado selecionar o IP alocado e clicar em "Ações", "Associar endereço IP elástico".
+- Selecionar a instância EC2 criada anteriormente.
+- Selecionar o endereço IP privado já sugerido.
+- Marcar a opção "Permitir que o endereço IP elástico seja reassociado" e clicar em "Associar".
+<br>
+
+#### Editar grupo de segurança liberando as portas de comunicação para acesso público
+- Na pagina do serviço EC2, no menu lateral esquerdo em "Rede e Segurança" e clicar em "Security groups".
+- Selecionar o grupo criado anteriormente junto com a instancia.
+- Clicar em "Regras de entrada" e do lado esquerdo da tela em "Editar regras de entrada".
+- Automáticamente virão já três regras de entrada definidas(HTTPS/443, HTTP/80, SSH/22), adicione as demais: 111/TCP e UDP,
+2049/TCP/UDP. 
+Deverá ficar como na tabela abaixo:
+
+    Tipo | Protocolo | Intervalo de portas | Origem | Descrição
+    ---|---|---|---|---
+    SSH | TCP | 22 | 0.0.0.0/0 | SSH
+    TCP personalizado | TCP | 80 | 0.0.0.0/0 | HTTP
+    TCP personalizado | TCP | 443 | 0.0.0.0/0 | HTTPS
+    TCP personalizado | TCP | 111 | 0.0.0.0/0 | RPC
+    UDP personalizado | UDP | 111 | 0.0.0.0/0 | RPC
+    TCP personalizado | TCP | 2049 | 0.0.0.0/0 | NFS
+    UDP personalizado | UDP | 2049 | 0.0.0.0/0 | NFS
+
+### >> LINUX
+
 
 <br>
 

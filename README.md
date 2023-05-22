@@ -85,7 +85,7 @@ OFFLINE;
 
 - Clicar em "Salvar regras".
 ### >> LINUX
-#### Maquina servidor NFS
+### Maquina servidor NFS
 - Pra configurar o NFS instale o pacote necessário utilizando o comando:
 ```
 sudo yum install nfs-utils
@@ -99,7 +99,7 @@ sudo mkdir nome/do/diretorio
 ```
 sudo nano /etc/exports
 ```
-- Adicione uma linha com o caminho do diretório + o intervalo de endereços IP que deseja dar permissão de acesso (neste caso * para qualquer endereço IP) + as devidas permissões entre parênteses como no comando abaixo:
+- Adicionar uma linha com o caminho do diretório + o intervalo de endereços IP que deseja dar permissão de acesso (neste caso * para qualquer endereço IP) + as devidas permissões entre parênteses como no comando abaixo:
 ```
 /home/nfs *(rw,sync,no_root_squash,no_all_squash)
 ```
@@ -118,7 +118,7 @@ sudo exportfs -v
 ```
 O mesmo deverá retornar o diretório criado anteriormente.
 
-#### Maquina cliente
+### Maquina cliente
 - Certificar-se de que a maquina está com o NFS instalado com o comando:
 ```
 nfsstat
@@ -137,8 +137,54 @@ df  -h
 ```
 O mesmo listará as partições montadas em disco e o espaço disponível, nela deve contar o diretório criado e informações do mesmo.
 
+### Configurando Apache no Servidor
+- Atualizar os pacotes do sistema com o comando:
+```
+sudo yum update
+```
+- Instale o Apache executando o comando:
+```
+sudo yum install httpd
+```
+- Após a conclusão da instalação, inicie o serviço do Apache com o comando:
+```
+sudo /bin/systemctl start httpd.service
+```
+- Verifique se o Apache está em execução executando o comando:
+```
+sudo service httpd status
+```
+- Ir até o diretório padrão dos arquivos do Apache com o comando:
+```
+cd var/www/html
+```
+- Verificar se tem um arquivo html no diretório com o comando:
+```
+ls
+```
+Abra o arquivo com o comando abaixo e caso não tenha você pode cria-lo da mesma forma. O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar o IP publico na sua maquina.
+```
+sudo nano index.html
+```
+O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar o IP publico na sua maquina. Desta forma certifica-se de que o Apache está rodando. Abaixo um exemplo de conteúdo HTML para teste(colar no arquivo criado).
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apache</title>
+</head>
+<body>
+  <h1>Apache rodando com sucesso!!!</h1>
+</body>
+</html>
+```
+
+
 <br>
 
 ## 📎 Referências
-[MEditor.md](https://pandao.github.io/editor.md/index.html)
+[MEditor.md](https://pandao.github.io/editor.md/index.html)<br>
 [Servidor de Arquivos NFS](https://debian-handbook.info/browse/pt-BR/stable/sect.nfs-file-server.html)

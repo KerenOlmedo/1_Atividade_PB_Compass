@@ -86,36 +86,55 @@ OFFLINE;
 - Clicar em "Salvar regras".
 ### >> LINUX
 #### Maquina servidor NFS
-- Pra configurar o NFS instale o pacote necessário utilizando o comando 
+- Pra configurar o NFS instale o pacote necessário utilizando o comando:
 ```
 sudo yum install nfs-utils
 ```
-- É necessário criar um diretório para compartilhamento via NFS que pode ser criado através do comando 
-“sudo mkdir nome/do/diretorio”
-- Para realizar as configurações de acesso do NFS será necessário acessar e editar o arquivo “/etc/exports” com um editor de arquivos (neste exemplo foi utilizado o Nano), através do comando
-“sudo nano /etc/exports”
-- Adicione uma linha com o caminho do diretório + o intervalo de endereços IP que deseja dar permissão de acesso (neste caso * para qualquer endereço IP) + as devidas permissões entre parênteses como no comando abaixo.
-“/home/nfs *(rw,sync,no_root_squash,no_all_squash)”
-rw dará permissões de leitura e gravação, a opção sync garante que as alterações sejam gravadas no disco imediatamente, a opção no_root_squash permite acesso de root e a no_all_squash mantem as permissoes de acesso originais dos usuários das maquinas clientes.
-- Depois disso salve o arquivo e reinicie o serviço para atualizar as novas permissões através do comando
-“sudo systemctl restart nfs-server”
-- Antes de testar verifique se o serviço está ativo com o comando 
-“sudo systemctl status nfs-server” 
-- Para verificar se o diretório foi realmente compartilhado execute o comando
+- É necessário criar um diretório para compartilhamento via NFS que pode ser criado através do comando:
+
+```
+sudo mkdir nome/do/diretorio
+```
+- Para realizar as configurações de acesso do NFS será necessário acessar e editar o arquivo “/etc/exports” com um editor de arquivos (neste exemplo foi utilizado o Nano), através do comando:
+```
+sudo nano /etc/exports
+```
+- Adicione uma linha com o caminho do diretório + o intervalo de endereços IP que deseja dar permissão de acesso (neste caso * para qualquer endereço IP) + as devidas permissões entre parênteses como no comando abaixo:
+```
+/home/nfs *(rw,sync,no_root_squash,no_all_squash)
+```
+"rw" dará permissões de leitura e gravação, a opção "sync" garante que as alterações sejam gravadas no disco imediatamente, a opção no_root_squash permite acesso de root e "no_all_squash" mantem as permissoes de acesso originais dos usuários das maquinas clientes.
+- Depois disso salve o arquivo e reinicie o serviço para atualizar as novas permissões através do comando:
+```
+sudo systemctl restart nfs-server
+```
+- Antes de testar verifique se o serviço está ativo com o comando:
+```
+sudo systemctl status nfs-server
+```
+- Para verificar se o diretório foi realmente compartilhado execute o comando:
+```
 sudo exportfs -v
+```
 O mesmo deverá retornar o diretório criado anteriormente.
 
 #### Maquina cliente
-- Certificar-se de que a maquina está com o NFS instalado com o comando. 
-nfsstat 
+- Certificar-se de que a maquina está com o NFS instalado com o comando:
+```
+nfsstat
+``` 
 Esse comando exibe estatísticas e informações relacionadas ao NFS. Se o comando for reconhecido e retornar informações, significa que o NFS está instalado, caso não estiver disponível ou não for reconhecido indica que o NFS não está instalado.
-- Será necessário montar um diretório de compartilhamento na máquina cliente através do comando 
+- Será necessário montar um diretório de compartilhamento na máquina cliente através do comando:
+```
 Sudo mount -t nfs 192.168.4.10:/home/nfs /mnt/nfs
-192.168.4.10 – IP do servidor
+```
+192.168.4.10 – IP do servidor(substitua pelo da sua maquina servidor)
 /home/nfs – caminho absoluto do servidor
 /mnt/nfs – caminho local do cliente
-- Para verificar se o diretório foi mesmo criado execute o comando 
+- Para verificar se o diretório foi mesmo criado execute o comando:
+```
 df  -h
+```
 O mesmo listará as partições montadas em disco e o espaço disponível, nela deve contar o diretório criado e informações do mesmo.
 
 <br>

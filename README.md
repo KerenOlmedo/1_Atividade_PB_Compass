@@ -12,7 +12,7 @@
 
 ## 🚀 Objetivo
 
-Documentar detalhadamente o processo de criação de um ambiente AWS com instância EC2 configurado com NFS para armazenamento de dados.
+Documentar detalhadamente o processo de criação de um ambiente AWS com instância EC2 configurado com NFS para armazenamento de dados e do Apache com script de validação automatizado para execução.
 <br>
 
 ## ☁ Requisitos AWS
@@ -128,8 +128,8 @@ Esse comando exibe estatísticas e informações relacionadas ao NFS. Se o coman
 ```
 Sudo mount -t nfs 192.168.4.10:/home/nfs /mnt/nfs
 ```
-192.168.4.10 – IP do servidor(substitua pelo da sua maquina servidor)
-/home/nfs – caminho absoluto do servidor
+192.168.4.10 – IP do servidor(substitua pelo da sua maquina servidor)<br>
+/home/nfs – caminho absoluto do servidor<br>
 /mnt/nfs – caminho local do cliente
 - Para verificar se o diretório foi mesmo criado execute o comando:
 ```
@@ -162,8 +162,7 @@ cd var/www/html
 ```
 ls
 ```
-Abra o arquivo com o comando abaixo e caso não tenha você pode cria-lo da mesma forma. O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar o IP publico na sua maquina.
-```
+Abra o arquivo com o comando abaixo e caso não tenha você pode cria-lo da mesma forma.
 sudo nano index.html
 ```
 O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar o IP publico na sua maquina. Desta forma certifica-se de que o Apache está rodando. Abaixo um exemplo de conteúdo HTML para teste(colar no arquivo criado).
@@ -182,9 +181,53 @@ O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar 
 </html>
 ```
 
+### Criando um script que valide se o serviço do Apache está online
+- Para criar um script é necessário utilizar um editor de texto e ao final do nome do arquivo atribuir a extensão "sh". O comando abaixo criará e abrirá o arquivo vazio.
+```
+nano validacao_apache.sh
+```
+- Colar o código abaixo no arquivo.
+```
+#!/bin/bash
 
+# Obter data e hora atual
+data_hora=$(date +"%Y-%m-%d %H:%M:%S")
+
+# Verificar o status do serviço do Apache
+apache_status=$(systemctl is-active httpd)
+
+# Verificar se o serviço está ativo
+if [ "$apache_status" == "active" ]; then
+    echo "O serviço do Apache está ONLINE."
+    resultado_validacao="ONLINE"
+
+    # Define o nome do arquivo de saída para o serviço online
+    arquivo_de_saida="servico_online.txt"
+else
+    echo "O serviço do Apache está OFFLINE."
+    resultado_validacao="OFFLINE"
+
+    # Define o nome do arquivo de saída para o serviço offline
+    arquivo_de_saida="servico_offline.txt"
+fi
+
+# Mensagem personalizada
+mensagem_personalizada="Serviço do Apache verificado."
+
+# Combinação de todas as informações
+mensagem_final="$data_hora - Serviço do Apache - Status: $resultado_validacao - $mensagem_personalizada"
+
+# Diretório no NFS
+diretorio_nfs="/home/nfs/keren"
+
+# Cria o arquivo de resultado no diretório do NFS com as informações
+echo "$mensagem_final" > "$diretorio_nfs/$resultado_validacao"
+echo "Resultado da validação foi salvo em $diretorio_nfs/$resultado_validacao."
+
+```
 <br>
 
 ## 📎 Referências
 [MEditor.md](https://pandao.github.io/editor.md/index.html)<br>
-[Servidor de Arquivos NFS](https://debian-handbook.info/browse/pt-BR/stable/sect.nfs-file-server.html)
+[Servidor de Arquivos NFS](https://debian-handbook.info/browse/pt-BR/stable/sect.nfs-file-server.html)<br>
+[Documentação Apache](https://httpd.apache.org/docs/2.4/pt-br/)

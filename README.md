@@ -222,7 +222,7 @@ mensagem_final="$data_hora - Serviço do Apache - Status: $resultado_validacao -
 diretorio_nfs="/home/nfs/keren"
 
 # Cria o arquivo de resultado no diretório do NFS com as informações
-echo "$mensagem_final" > "$diretorio_nfs/$resultado_validacao"
+echo "$mensagem_final" > "$diretorio_nfs/$arquivo_de_saida"
 
 echo "Resultado da validação foi salvo em $diretorio_nfs/$arquivo_de_saida."
 
@@ -232,10 +232,36 @@ echo "Resultado da validação foi salvo em $diretorio_nfs/$arquivo_de_saida."
 ```
 sudo chmod +x validacao_apache.sh
 ```
-- Depois para executar o script utilize o comando:
+- Depois para executar o script estando no diretório em que ele pertence utilize o comando:
 ```
 ./validacao_apache.sh
 ```
+- Para executá-lo fora do diretório em que ele pertence é necessário utilizar o caminho completo como no exemplo de comando abaixo:
+```
+/home/validacao_apache.sh
+
+```
+### Automatizando o script para execução a cada 5 minutos
+
+Para automatizar a execução do script a cada 5 minutos, você pode usar a ferramenta cron no Linux. O cron é um utilitário que permite agendar tarefas para serem executadas em momentos específicos.
+- No seu  terminal e digite o seguinte comando para editar as tarefas cron:
+```
+crontab -e
+```
+- Ao abrir o arquivo é preciso adicioar a seguinte linha para agendar a execução do script a cada 5 minutos:
+```
+*/5 * * * * /caminho/para/o/script/validacao_apache.sh
+```
+Substitua "/caminho/para/o/script" pelo caminho real para o diretório onde o seu script "validacao_apache.sh" está localizado.
+
+Para entender cada parte dessa configuração:
+
+*/5: O asterisco (*) significa "qualquer valor".
+No contexto dos minutos, */5 significa "a cada 5 minutos". Ou seja, a tarefa será executada quando o valor dos minutos for divisível por 5.
+
+O asterisco (*) é usado para representar "qualquer valor" nas outras partes da configuração. Na terceira posição representa "qualquer valor" para o dia do mês, na quarta posição representa "qualquer valor" para o mês e na quinta posição representa "qualquer valor" para o dia da semana.
+
+OBS: O cron irá executar o script no contexto do usuário atual. Portanto, certifique-se de que o usuário tenha permissão adequada para executar o script e acessar os recursos necessários.
 
 <br>
 

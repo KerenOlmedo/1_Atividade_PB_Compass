@@ -163,6 +163,7 @@ cd var/www/html
 ls
 ```
 Abra o arquivo com o comando abaixo e caso não tenha você pode cria-lo da mesma forma.
+```
 sudo nano index.html
 ```
 O conteudo HTML desse arquivo que aparecerá na página do navegador ao acessar o IP publico na sua maquina. Desta forma certifica-se de que o Apache está rodando. Abaixo um exemplo de conteúdo HTML para teste(colar no arquivo criado).
@@ -222,9 +223,20 @@ diretorio_nfs="/home/nfs/keren"
 
 # Cria o arquivo de resultado no diretório do NFS com as informações
 echo "$mensagem_final" > "$diretorio_nfs/$resultado_validacao"
-echo "Resultado da validação foi salvo em $diretorio_nfs/$resultado_validacao."
+
+echo "Resultado da validação foi salvo em $diretorio_nfs/$arquivo_de_saida."
 
 ```
+- Certifique-se de substituir "/home/nfs/keren" pelo caminho real do diretório no NFS em que você deseja salvar o arquivo de resultado.
+- Depois de criar o arquivo "validacao_apache.sh" é preciso dar permissão de execução ao mesmo usando o comando:
+```
+sudo chmod +x validacao_apache.sh
+```
+- Depois para executar o script utilize o comando:
+```
+./validacao_apache.sh
+```
+
 <br>
 
 ## 📎 Referências

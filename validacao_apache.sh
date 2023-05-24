@@ -32,4 +32,5 @@ diretorio_nfs="/home/nfs/keren"
 
 # Cria o arquivo de resultado no diretório do NFS com as informações
 echo "$mensagem_final" > "$diretorio_nfs/$resultado_validacao"
-echo "Resultado da validação foi salvo em $diretorio_nfs/$resultado_validacao."
+
+echo "Resultado da validação foi salvo em $diretorio_nfs/$arquivo_de_saida."

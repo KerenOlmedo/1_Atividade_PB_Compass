@@ -6,7 +6,9 @@
   <a href="#-Objetivo">Objetivo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-AWS">Requisitos AWS</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-no-linux">Requisitos no linux</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-Instruções-de-Execução">Instruções de Execução</a>
+  <a href="#>>-AWS">Instruções de Execução AWS</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#>>-LINUX">Instruções de Execução Linux</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-Referências">Instruções de Execução</a>
 </p>
 
 
@@ -263,6 +265,7 @@ O asterisco (*) é usado para representar "qualquer valor" nas outras partes da 
 
 OBS: O cron irá executar o script no contexto do usuário atual. Portanto, certifique-se de que o usuário tenha permissão adequada para executar o script e acessar os recursos necessários.
 
+- Verificar se o script está realmente está automatizado. Vá até o diretório de compartilhamento criado e abra o arquivo de saida gerado("servico_offline.txt" ou "servico_online.txt" como no exemplo dado anteriormente), nele constará a hora e data em que o arquivo foi gerado. Dê 5 minutos e repita o processo para verificar se foi gerado um novo arquivo com horário de 5 minutos mais recente.
 <br>
 
 ## 📎 Referências

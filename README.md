@@ -6,8 +6,7 @@
   <a href="#-Objetivo">Objetivo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-AWS">Requisitos AWS</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-no-linux">Requisitos no linux</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#->>-AWS">Instruções de Execução AWS</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#->>-LINUX">Instruções de Execução Linux</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-Instruções de Execução">Instruções de Execução</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Referências">Referências</a>
 </p>
 
@@ -71,8 +70,8 @@ OFFLINE;
 - Na pagina do serviço EC2, no menu lateral esquerdo em "Rede e Segurança" e clicar em "Security groups".
 - Selecionar o grupo criado anteriormente junto com a instancia.
 - Clicar em "Regras de entrada" e do lado esquerdo da tela em "Editar regras de entrada".
-- Automáticamente virão já três regras de entrada definidas(HTTPS/443, HTTP/80, SSH/22), adicione as demais: 111/TCP e UDP,
-2049/TCP/UDP. 
+- Automáticamente virá uma regra de entrada definidas(SSH/22), adicione as demais: 111/TCP e UDP,
+2049/TCP/UDP, HTTPS/443, HTTP/80.
 - Deverá ficar como na tabela abaixo:
 
     Tipo | Protocolo | Intervalo de portas | Origem | Descrição
@@ -86,53 +85,43 @@ OFFLINE;
     UDP personalizado | UDP | 2049 | 0.0.0.0/0 | NFS
 
 - Clicar em "Salvar regras".
+
 ### >> LINUX
-### Maquina servidor NFS
-- Pra configurar o NFS instale o pacote necessário utilizando o comando:
+### Maquina servidor NFS utilizando Elastic File System
+Antes de começarmos as configurações via SSH para EFS, navegue no serviço EC2 da AWS em Security groups.
+- Clique em criar grupo de segurança, este será utilizado para segurança de rede do EFS.
+- Depois de atribuir um nome(EFS-acess), adicione como regra de entrada para NFS com origem para o grupo de segurança criado e anexado juntamente da instancia.
+Deverá ficar assim:
+    Tipo | Protocolo | Intervalo de portas | Origem | Descrição
+    ---|---|---|---|---
+    NFS | TCP | 2049 | sg-0e0fe595c74f876a6 | NFS
+
+- Clique em criar grupo de segurança para finalizar.
+
+###Criando Elastic File System
+- Ainda no ambiente da AWS, navegue até o serviço de EFS.
+- No menu lateral esquerdo clique em Sistemas de arquivos e logo após em "Criar sistema de arquivos" a direita.
+- Adicione um nome para o mesmo(sistemaArquivosEFS) e selecione a opção "personalizar".
+- Marque a opção "One zone" e selecione a zona de disponibilidade em que suas EC2 está criada e avance.
+- Mantenha as opções pré-definidas, só altere o grupo de segurança para o "EFS-acess" criado anteriormente.
+- Revise e clique em criar para finalizar.
+- Abra o sistema de arquivos criado e clique no botão "anexar" a esquerda para visualizar as opções de montagem(IP ou DNS). 
+- A AWS já te dá os comandos definidos de acordo com as opções escolhidas, nesse caso vamos utilizar a montagem via DNS usando o cliente do NFS, copie o mesmo. Como no exemplo abaixo:
+```
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ efs
+```
+### Montando sistema de arquivos do EFS
+- Configure o NFS acessando sua maquina via SSH e instalando o pacote necessário através do comando:
 ```
 sudo yum install nfs-utils
 ```
-- É necessário criar um diretório para compartilhamento via NFS que pode ser criado através do comando:
+- Depois disso é necessário criar o sistema de arquivos para o EFS no diretótio de montagem, através do comando:
+```
+sudo mkdir /mnt/efs
+```
+-
 
-```
-sudo mkdir nome/do/diretorio
-```
-- Para realizar as configurações de acesso do NFS será necessário acessar e editar o arquivo “/etc/exports” com um editor de arquivos (neste exemplo foi utilizado o Nano), através do comando:
-```
-sudo nano /etc/exports
-```
-- Adicionar uma linha com o caminho do diretório + o intervalo de endereços IP que deseja dar permissão de acesso (neste caso * para qualquer endereço IP) + as devidas permissões entre parênteses como no comando abaixo:
-```
-/home/nfs *(rw,sync,no_root_squash,no_all_squash)
-```
-"rw" dará permissões de leitura e gravação, a opção "sync" garante que as alterações sejam gravadas no disco imediatamente, a opção no_root_squash permite acesso de root e "no_all_squash" mantem as permissoes de acesso originais dos usuários das maquinas clientes.
-- Depois disso salve o arquivo e reinicie o serviço para atualizar as novas permissões através do comando:
-```
-sudo systemctl restart nfs-server
-```
-- Antes de testar verifique se o serviço está ativo com o comando:
-```
-sudo systemctl status nfs-server
-```
-- Para verificar se o diretório foi realmente compartilhado execute o comando:
-```
-sudo exportfs -v
-```
-O mesmo deverá retornar o diretório criado anteriormente.
 
-### Maquina cliente
-- Certificar-se de que a maquina está com o NFS instalado com o comando:
-```
-nfsstat
-``` 
-Esse comando exibe estatísticas e informações relacionadas ao NFS. Se o comando for reconhecido e retornar informações, significa que o NFS está instalado, caso não estiver disponível ou não for reconhecido indica que o NFS não está instalado.
-- Será necessário montar um diretório de compartilhamento na máquina cliente através do comando:
-```
-Sudo mount -t nfs 192.168.4.10:/home/nfs /mnt/nfs
-```
-192.168.4.10 – IP do servidor(substitua pelo da sua maquina servidor)<br>
-/home/nfs – caminho absoluto do servidor<br>
-/mnt/nfs – caminho local do cliente
 - Para verificar se o diretório foi mesmo criado execute o comando:
 ```
 df  -h

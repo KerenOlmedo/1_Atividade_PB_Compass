@@ -43,7 +43,7 @@ OFFLINE;
 
 ## 📝 Instruções de Execução
 ### >> AWS
-#### Subir instância EC2 com par de chaves pública
+### Subir instância EC2 com par de chaves pública
 - Acessar a AWS na pagina do serviço EC2, e clicar em "instancias" no menu lateral esquerdo.
 - Clicar em "executar instâncias" na parte superior esquerda da tela.
 - Abaixo do campo de inserir nome clicar em "adicionar mais tags".
@@ -56,7 +56,7 @@ OFFLINE;
 - Configure o armazenamento com 16GiB, volume raiz gp2.
 - Clique em executar instância.
 
-#### Gerar Elastic IP e anexar à instância EC2
+### Gerar Elastic IP e anexar à instância EC2
 - Acessar a pagina do serviço EC2, no menu lateral esquerdo em "Rede e Segurança" e clicar em "IPs elásticos".
 - Clicar em "Alocar endereço IP elástico".
 - Automaticamente a região padrão vai vir como "Grupo de borda de Rede" e selecionado Conjunto de endereços IPv4 públicos da Amazon.
@@ -66,7 +66,7 @@ OFFLINE;
 - Selecionar o endereço IP privado já sugerido.
 - Marcar a opção "Permitir que o endereço IP elástico seja reassociado" e clicar em "Associar".
 
-#### Editar grupo de segurança liberando as portas de comunicação para acesso público
+### Editar grupo de segurança liberando as portas de comunicação para acesso público
 - Na pagina do serviço EC2, no menu lateral esquerdo em "Rede e Segurança" e clicar em "Security groups".
 - Selecionar o grupo criado anteriormente junto com a instancia.
 - Clicar em "Regras de entrada" e do lado esquerdo da tela em "Editar regras de entrada".
@@ -121,7 +121,7 @@ Ao instalar o "nfs-utils", você estará habilitando seu sistema para usar o NFS
 sudo mkdir /mnt/efs
 ```
 Podemos montar o sistema de arquivos de forma manual e de forma automática.
-##### --> Manual 
+#### --> Manual 
 Nessa forma será necessário montar sempre que a maquina for iniciada, utilizando o comando abaixo(o mesmo copiado do sistemas de arquivos):
 ```
 sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs- fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ /mnt/efs
@@ -134,7 +134,7 @@ df -hT | grep /mnt/efs
 ```
 Este comando lista todos os sistemas de arquivos montados no sistema e filtra apenas as linhas que contêm o diretório /mnt/efs. Se o EFS estiver montado corretamente, você verá uma linha de saída que mostra o sistema de arquivos do EFS e seus detalhes.
 
-##### --> Forma Automática
+#### --> Forma Automática
 
 
 - Para configurar a montagem do sistema de arquivos de forma automática é necessário editar o arquivo "etc/fstab", edite o mesmo através do comando:

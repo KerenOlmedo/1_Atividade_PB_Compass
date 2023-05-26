@@ -98,7 +98,7 @@ Deverá ficar assim:
 
 - Clique em criar grupo de segurança para finalizar.
 
-###Criando Elastic File System
+### Criando Elastic File System
 - Ainda no ambiente da AWS, navegue até o serviço de EFS.
 - No menu lateral esquerdo clique em Sistemas de arquivos e logo após em "Criar sistema de arquivos" a direita.
 - Adicione um nome para o mesmo(sistemaArquivosEFS) e selecione a opção "personalizar".
@@ -115,18 +115,46 @@ sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,ret
 ```
 sudo yum install nfs-utils
 ```
-- Depois disso é necessário criar o sistema de arquivos para o EFS no diretótio de montagem, através do comando:
+Ao instalar o "nfs-utils", você estará habilitando seu sistema para usar o NFS, é um protocolo que permite compartilhar diretórios e arquivos entre sistemas operacionais em uma rede.
+- Depois disso é necessário criar um diretório de arquivos para o EFS no diretótio de montagem, através do comando:
 ```
 sudo mkdir /mnt/efs
 ```
--
-
-
-- Para verificar se o diretório foi mesmo criado execute o comando:
+Podemos montar o sistema de arquivos de forma manual e de forma automática.
+>> Manual 
+Nessa forma será necessário montar sempre que a maquina for iniciada, utilizando o comando abaixo(o mesmo copiado do sistemas de arquivos):
 ```
-df  -h
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs- fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ /mnt/efs
 ```
-O mesmo listará as partições montadas em disco e o espaço disponível, nela deve contar o diretório criado e informações do mesmo.
+Certifique-se de substituir "/mnt/efs" pelo caminho real do seu diretório e "fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com" pelo ID e região do seu sistema de arquivos.
+
+- Para verificar se o sistema de arquivos do EFS está montado no diretório /mnt/efs, você pode usar o seguinte comando:
+```
+df -hT | grep /mnt/efs
+```
+Este comando lista todos os sistemas de arquivos montados no sistema e filtra apenas as linhas que contêm o diretório /mnt/efs. Se o EFS estiver montado corretamente, você verá uma linha de saída que mostra o sistema de arquivos do EFS e seus detalhes.
+
+>> Forma Automática
+- Para configurar a montagem do sistema de arquivos de forma automática é necessário editar o arquivo "etc/fstab", edite o mesmo através do comando:
+```
+sudo nano /etc/fstab
+```
+- Adicione a seguinte linha no final do arquivo:
+```
+fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ /mnt/efs nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,_netdev 0 0
+```
+Novamente, substitua "fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com" pelo ID do sistema de arquivos do seu EFS.
+- Salve e feche o arquivo.
+- Execute o seguinte comando para reiniciar a instância:
+```
+sudo reboot
+```
+Após a reinicialização, o sistema de arquivos do EFS estará montado no diretório /mnt/efs e estará disponível para uso na instância.
+Para verificar se o sistema de arquivos do EFS está realmente montado, execute o comando:
+```
+df -hT | grep /mnt/efs
+```
+Este comando lista todos os sistemas de arquivos montados no sistema e filtra apenas as linhas que contêm o diretório /mnt/efs. Se o EFS estiver montado corretamente, você verá uma linha de saída que mostra o sistema de arquivos do EFS e seus detalhes.
 
 ### Configurando Apache no Servidor
 - Atualizar os pacotes do sistema com o comando:

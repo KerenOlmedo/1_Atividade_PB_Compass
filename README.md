@@ -87,7 +87,7 @@ OFFLINE;
 - Clicar em "Salvar regras".
 
 ### >> LINUX
-### Maquina servidor NFS utilizando Elastic File System
+### Servidor NFS utilizando Elastic File System
 Antes de começarmos as configurações via SSH para EFS, navegue no serviço EC2 da AWS em Security groups.
 - Clique em criar grupo de segurança, este será utilizado para segurança de rede do EFS.
 - Depois de atribuir um nome(EFS-acess), adicione como regra de entrada para NFS com origem para o grupo de segurança criado e anexado juntamente da instancia.
@@ -121,7 +121,7 @@ Ao instalar o "nfs-utils", você estará habilitando seu sistema para usar o NFS
 sudo mkdir /mnt/efs
 ```
 Podemos montar o sistema de arquivos de forma manual e de forma automática.
---> Manual 
+##### --> Manual 
 Nessa forma será necessário montar sempre que a maquina for iniciada, utilizando o comando abaixo(o mesmo copiado do sistemas de arquivos):
 ```
 sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs- fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ /mnt/efs
@@ -134,7 +134,7 @@ df -hT | grep /mnt/efs
 ```
 Este comando lista todos os sistemas de arquivos montados no sistema e filtra apenas as linhas que contêm o diretório /mnt/efs. Se o EFS estiver montado corretamente, você verá uma linha de saída que mostra o sistema de arquivos do EFS e seus detalhes.
 
---> Forma Automática
+##### --> Forma Automática
 
 
 - Para configurar a montagem do sistema de arquivos de forma automática é necessário editar o arquivo "etc/fstab", edite o mesmo através do comando:

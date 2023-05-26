@@ -6,7 +6,7 @@
   <a href="#-Objetivo">Objetivo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-AWS">Requisitos AWS</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Requisitos-no-linux">Requisitos no linux</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-Instruções de Execução">Instruções de Execução</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-Instruções-de-Execução">Instruções de Execução</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-Referências">Referências</a>
 </p>
 
@@ -52,7 +52,7 @@ OFFLINE;
 - Selecionar como tipo de intância a família t3.small.
 - Em Par de chaves login clique em "criar novo par de chaves".
 - Insira o nome do par de chaves, tipo RSA, formato .ppk e clique em "criar par de chaves".
-- Em configurações de rede, selecione criar grupo de segurança e permitir todos tráfegos(SSH, HTTPS, HTTP).
+- Em configurações de rede, selecione criar grupo de segurança e permitir todos tráfegos(SSH).
 - Configure o armazenamento com 16GiB, volume raiz gp2.
 - Clique em executar instância.
 
@@ -121,7 +121,7 @@ Ao instalar o "nfs-utils", você estará habilitando seu sistema para usar o NFS
 sudo mkdir /mnt/efs
 ```
 Podemos montar o sistema de arquivos de forma manual e de forma automática.
->> Manual 
+--> Manual 
 Nessa forma será necessário montar sempre que a maquina for iniciada, utilizando o comando abaixo(o mesmo copiado do sistemas de arquivos):
 ```
 sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 fs- fs-07d84686cb6d691f7.efs.us-east-1.amazonaws.com:/ /mnt/efs
@@ -134,7 +134,9 @@ df -hT | grep /mnt/efs
 ```
 Este comando lista todos os sistemas de arquivos montados no sistema e filtra apenas as linhas que contêm o diretório /mnt/efs. Se o EFS estiver montado corretamente, você verá uma linha de saída que mostra o sistema de arquivos do EFS e seus detalhes.
 
->> Forma Automática
+--> Forma Automática
+
+
 - Para configurar a montagem do sistema de arquivos de forma automática é necessário editar o arquivo "etc/fstab", edite o mesmo através do comando:
 ```
 sudo nano /etc/fstab
@@ -293,3 +295,4 @@ OBS: O cron irá executar o script no contexto do usuário atual. Portanto, cert
 [MEditor.md](https://pandao.github.io/editor.md/index.html)<br>
 [Servidor de Arquivos NFS](https://debian-handbook.info/browse/pt-BR/stable/sect.nfs-file-server.html)<br>
 [Documentação Apache](https://httpd.apache.org/docs/2.4/pt-br/)
+[AWS Elastic File System](https://aws.amazon.com/pt/efs/)

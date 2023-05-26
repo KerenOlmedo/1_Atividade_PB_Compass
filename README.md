@@ -152,6 +152,10 @@ sudo yum install httpd
 ```
 sudo /bin/systemctl start httpd.service
 ```
+- Utilize também o seguinte comando para habilitar o serviço do Apache para inicialização automática:
+```
+sudo systemctl enable httpd.service
+```
 - Verifique se o Apache está em execução executando o comando:
 ```
 sudo service httpd status
@@ -221,7 +225,7 @@ mensagem_personalizada="Serviço do Apache verificado."
 mensagem_final="$data_hora - Serviço do Apache - Status: $resultado_validacao - $mensagem_personalizada"
 
 # Diretório no NFS
-diretorio_nfs="/home/nfs/keren"
+diretorio_nfs="/mnt/efs/keren"
 
 # Cria o arquivo de resultado no diretório do NFS com as informações
 echo "$mensagem_final" > "$diretorio_nfs/$arquivo_de_saida"
@@ -229,7 +233,7 @@ echo "$mensagem_final" > "$diretorio_nfs/$arquivo_de_saida"
 echo "Resultado da validação foi salvo em $diretorio_nfs/$arquivo_de_saida."
 
 ```
-- Certifique-se de substituir "/home/nfs/keren" pelo caminho real do diretório no NFS em que você deseja salvar o arquivo de resultado.
+- Certifique-se de substituir "/mnt/efs/keren" pelo caminho real do diretório no NFS em que você deseja salvar o arquivo de resultado.
 - Depois de criar o arquivo "validacao_apache.sh" é preciso dar permissão de execução ao mesmo usando o comando:
 ```
 sudo chmod +x validacao_apache.sh
